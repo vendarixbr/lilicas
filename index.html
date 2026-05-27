@@ -848,7 +848,7 @@ textarea{resize:none}button{cursor:pointer}
         <input class="field-input" id="q-mentions" placeholder="@conta1 @conta2…">
       </div>
     </div>
-    <div class="nav-row au4"><button class="btn-primary" onclick="go(16)">Próxima <svg width="14" height="8"><use href="#ic-arrow"/></svg></button></div>
+    <div class="nav-row au4"><button class="btn-primary" onclick="save('q-mentions');go(16)">Próxima <svg width="14" height="8"><use href="#ic-arrow"/></svg></button></div>
   </div>
 </div>
 
@@ -985,7 +985,7 @@ textarea{resize:none}button{cursor:pointer}
         <input class="field-input" id="q-playlist-link" placeholder="https://open.spotify.com/…">
       </div>
     </div>
-    <div class="nav-row au4"><button class="btn-primary" onclick="go(23)">Próxima <svg width="14" height="8"><use href="#ic-arrow"/></svg></button></div>
+    <div class="nav-row au4"><button class="btn-primary" onclick="save('q-pinterest');save('q-reels-ref');save('q-playlist-link');go(23)">Próxima <svg width="14" height="8"><use href="#ic-arrow"/></svg></button></div>
   </div>
 </div>
 
@@ -1024,7 +1024,7 @@ textarea{resize:none}button{cursor:pointer}
         <input class="field-input" id="q-hora-principal" placeholder="Ex: cerimônia às 17h, first dance às 20h">
       </div>
     </div>
-    <div class="nav-row au3"><button class="btn-primary" onclick="go(25)">Próxima <svg width="14" height="8"><use href="#ic-arrow"/></svg></button></div>
+    <div class="nav-row au3"><button class="btn-primary" onclick="save('q-endereco');save('q-chegada');save('q-saida');save('q-hora-principal');go(25)">Próxima <svg width="14" height="8"><use href="#ic-arrow"/></svg></button></div>
   </div>
 </div>
 
@@ -1049,22 +1049,22 @@ textarea{resize:none}button{cursor:pointer}
     <div class="contacts-grid au2">
       <div class="contact-card">
         <span class="contact-role"><svg><use href="#ic-star"/></svg> Cerimonialista</span>
-        <input class="contact-input" placeholder="Nome"><input class="contact-input" placeholder="WhatsApp"><input class="contact-input" placeholder="@instagram">
+        <input class="contact-input" id="q-cerimon-nome" placeholder="Nome"><input class="contact-input" id="q-cerimon-wa" placeholder="WhatsApp"><input class="contact-input" id="q-cerimon-ig" placeholder="@instagram">
       </div>
       <div class="contact-card">
         <span class="contact-role"><svg><use href="#ic-camera"/></svg> Fotógrafo(a)</span>
-        <input class="contact-input" placeholder="Nome"><input class="contact-input" placeholder="WhatsApp"><input class="contact-input" placeholder="@instagram">
+        <input class="contact-input" id="q-foto-nome" placeholder="Nome"><input class="contact-input" id="q-foto-wa" placeholder="WhatsApp"><input class="contact-input" id="q-foto-ig" placeholder="@instagram">
       </div>
       <div class="contact-card">
         <span class="contact-role"><svg><use href="#ic-video"/></svg> Filmmaker</span>
-        <input class="contact-input" placeholder="Nome"><input class="contact-input" placeholder="WhatsApp"><input class="contact-input" placeholder="@instagram">
+        <input class="contact-input" id="q-film-nome" placeholder="Nome"><input class="contact-input" id="q-film-wa" placeholder="WhatsApp"><input class="contact-input" id="q-film-ig" placeholder="@instagram">
       </div>
       <div class="contact-card">
         <span class="contact-role"><svg><use href="#ic-person"/></svg> Outros</span>
-        <input class="contact-input" placeholder="Função / Nome"><input class="contact-input" placeholder="WhatsApp"><input class="contact-input" placeholder="@instagram">
+        <input class="contact-input" id="q-outros-nome" placeholder="Função / Nome"><input class="contact-input" id="q-outros-wa" placeholder="WhatsApp"><input class="contact-input" id="q-outros-ig" placeholder="@instagram">
       </div>
     </div>
-    <div class="nav-row au3"><button class="btn-primary" onclick="go(27)">Próxima <svg width="14" height="8"><use href="#ic-arrow"/></svg></button></div>
+    <div class="nav-row au3"><button class="btn-primary" onclick="save('q-cerimon-nome');save('q-cerimon-wa');save('q-cerimon-ig');save('q-foto-nome');save('q-foto-wa');save('q-foto-ig');save('q-film-nome');save('q-film-wa');save('q-film-ig');save('q-outros-nome');save('q-outros-wa');save('q-outros-ig');go(27)">Próxima <svg width="14" height="8"><use href="#ic-arrow"/></svg></button></div>
   </div>
 </div>
 
@@ -1088,8 +1088,8 @@ textarea{resize:none}button{cursor:pointer}
       <p>Suas informações são usadas apenas durante a cobertura. Você pode alterar a senha após o evento.</p>
     </div>
     <div class="nav-row au4">
-      <button class="btn-ghost" onclick="go(28)">Prefiro enviar por WhatsApp</button>
-      <button class="btn-primary" onclick="go(28)">Próxima <svg width="14" height="8"><use href="#ic-arrow"/></svg></button>
+      <button class="btn-ghost" onclick="save('q-ig-login');save('q-ig-senha');go(28)">Prefiro enviar por WhatsApp</button>
+      <button class="btn-primary" onclick="save('q-ig-login');save('q-ig-senha');go(28)">Próxima <svg width="14" height="8"><use href="#ic-arrow"/></svg></button>
     </div>
   </div>
 </div>
