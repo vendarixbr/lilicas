@@ -427,6 +427,22 @@ button,input{font-family:inherit;border:none;outline:none;cursor:pointer;-webkit
 <div class="toast" id="toast"></div>
 
 <script>
+/* ── STORAGE ── */
+window.storage={
+  _p:'lcunhar_',
+  async set(k,v){localStorage.setItem(this._p+k,v)},
+  async get(k){const v=localStorage.getItem(this._p+k);return v!==null?{value:v}:null},
+  async list(prefix){
+    const keys=[];
+    for(let i=0;i<localStorage.length;i++){
+      const k=localStorage.key(i);
+      if(k&&k.startsWith(this._p+prefix))keys.push(k.slice(this._p.length));
+    }
+    return{keys};
+  },
+  async delete(k){localStorage.removeItem(this._p+k)}
+};
+
 /* ── CONFIG ── */
 const PASS_HASH='lcunhar2025';
 const SESSION_KEY='lcunhar_admin_session';
