@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Painel · @lcunhar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&family=Raleway:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;-webkit-text-size-adjust:100%}
+body{font-family:'Raleway',sans-serif;background:#f7f4ef;color:#1a1610;min-height:100vh}
+button,input{font-family:inherit;border:none;outline:none;cursor:pointer;-webkit-appearance:none;appearance:none}
+
+:root{
+  --gold:#c8a96e;--gold-b:#8a6f42;--gold-bg:rgba(200,169,110,.1);
+  --dark:#1a1610;--mid:#4a3f30;--muted:#9a8f82;
+  --border:#e8e2d8;--white:#ffffff;
+  --surface:#f0ebe2;--card:#ffffff;
+  --danger:#c0392b;--success:#27745a;
+  --radius:8px;--radius-lg:14px;
+  --shadow:0 1px 3px rgba(0,0,0,.06),0 4px 16px rgba(0,0,0,.06);
+}
+
+/* ── LOADING ── */
+#app-loading{
+  position:fixed;inset:0;background:#f7f4ef;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;
+  z-index:9999;transition:opacity .4s;
+}
+#app-loading.hide{opacity:0;pointer-events:none}
+.load-dot{
+  width:8px;height:8px;border-radius:50%;background:var(--gold);
+  display:inline-block;animation:bounce .9s ease-in-out infinite;
+}
+.load-dot:nth-child(2){animation-delay:.15s}.load-dot:nth-child(3){animation-delay:.3s}
+@keyframes bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-10px)}}
+
+/* ── LOGIN ── */
+#login-view{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  padding:24px;
+  background:linear-gradient(160deg,#f5f0e8 0%,#ede6d8 100%);
+}
+.login-card{
+  background:var(--white);border-radius:var(--radius-lg);
+  box-shadow:var(--shadow);padding:48px 40px;
+  width:100%;max-width:380px;text-align:center;
+}
+.login-mono{
+  font-family:'Playfair Display',serif;font-size:52px;font-weight:400;
+  color:var(--gold);letter-spacing:6px;margin-bottom:4px;
+}
+.login-sub{
+  font-size:11px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--muted);font-weight:300;margin-bottom:36px;
+}
+.login-divider{
+  height:1px;background:linear-gradient(to right,transparent,var(--gold),transparent);
+  margin:20px 0 28px;
+}
+.login-label{
+  display:block;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;
+  color:var(--muted);font-weight:400;text-align:left;margin-bottom:6px;
+}
+.login-input{
+  width:100%;background:var(--surface);border:1.5px solid var(--border);
+  border-radius:var(--radius);color:var(--dark);
+  font-size:15px;font-weight:300;padding:14px 16px;
+  transition:border-color .25s,background .25s;margin-bottom:14px;
+}
+.login-input:focus{border-color:var(--gold);background:#fff}
+.login-input::placeholder{color:var(--muted);opacity:.6}
+.login-btn{
+  width:100%;background:var(--dark);color:#f0ebe3;
+  font-size:11px;letter-spacing:3px;text-transform:uppercase;font-weight:400;
+  padding:16px;border-radius:var(--radius);
+  transition:all .25s;margin-top:6px;
+  position:relative;overflow:hidden;
+}
+.login-btn:hover{background:#2d261a;transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,0,0,.2)}
+.login-btn:active{transform:translateY(0)}
+.login-err{
+  font-size:12px;color:var(--danger);font-weight:300;letter-spacing:.3px;
+  margin-top:10px;display:none;
+}
+.login-err.show{display:block}
+
+/* ── APP SHELL ── */
+#admin-view{display:none;min-height:100vh;flex-direction:column}
+#admin-view.show{display:flex}
+
+/* ── TOP BAR ── */
+.topbar{
+  background:var(--dark);color:#f0ebe3;
+  padding:0 24px;height:60px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:100;
+  border-bottom:1px solid rgba(200,169,110,.15);
+}
+.topbar-brand{
+  display:flex;align-items:center;gap:12px;
+}
+.topbar-mono{
+  font-family:'Playfair Display',serif;font-size:22px;
+  color:var(--gold);letter-spacing:4px;
+}
+.topbar-label{
+  font-size:10px;letter-spacing:3px;text-transform:uppercase;
+  color:rgba(200,169,110,.6);font-weight:200;
+}
+.topbar-right{display:flex;align-items:center;gap:12px}
+.logout-btn{
+  font-size:10px;letter-spacing:2px;text-transform:uppercase;
+  color:rgba(200,169,110,.7);font-weight:300;
+  background:transparent;padding:8px 14px;
+  border:1px solid rgba(200,169,110,.2);border-radius:20px;
+  transition:all .25s;
+}
+.logout-btn:hover{color:var(--gold);border-color:rgba(200,169,110,.5)}
+
+/* ── MAIN ── */
+.main{flex:1;padding:32px 24px;max-width:1100px;margin:0 auto;width:100%}
+
+/* ── STATS ROW ── */
+.stats-row{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:12px;margin-bottom:28px;
+}
+.stat-card{
+  background:var(--white);border-radius:var(--radius);
+  border:1px solid var(--border);padding:16px 18px;
+}
+.stat-num{
+  font-family:'Playfair Display',serif;font-size:32px;font-weight:400;
+  color:var(--dark);line-height:1;margin-bottom:4px;
+}
+.stat-label{
+  font-size:10px;letter-spacing:2.5px;text-transform:uppercase;
+  color:var(--muted);font-weight:300;
+}
+
+/* ── SEARCH / FILTER ── */
+.controls{
+  display:flex;align-items:center;gap:10px;margin-bottom:20px;flex-wrap:wrap;
+}
+.search-wrap{position:relative;flex:1;min-width:200px}
+.search-input{
+  width:100%;background:var(--white);border:1px solid var(--border);
+  border-radius:var(--radius);color:var(--dark);
+  font-size:14px;font-weight:300;padding:11px 14px 11px 38px;
+  transition:border-color .25s;
+}
+.search-input:focus{border-color:var(--gold)}
+.search-icon{
+  position:absolute;left:12px;top:50%;transform:translateY(-50%);
+  color:var(--muted);font-size:15px;pointer-events:none;
+}
+.filter-btn{
+  font-size:11px;letter-spacing:1.5px;text-transform:uppercase;font-weight:400;
+  padding:11px 16px;border-radius:var(--radius);
+  border:1px solid var(--border);background:var(--white);color:var(--mid);
+  transition:all .2s;
+}
+.filter-btn.active{background:var(--dark);color:#f0ebe3;border-color:var(--dark)}
+.refresh-btn{
+  font-size:11px;letter-spacing:1.5px;text-transform:uppercase;font-weight:400;
+  padding:11px 16px;border-radius:var(--radius);
+  border:1px solid rgba(200,169,110,.4);background:var(--gold-bg);color:var(--gold-b);
+  transition:all .2s;display:flex;align-items:center;gap:6px;
+}
+.refresh-btn:hover{background:rgba(200,169,110,.18)}
+
+/* ── SECTION TITLE ── */
+.section-title{
+  font-family:'Playfair Display',serif;font-size:20px;font-weight:400;
+  color:var(--dark);margin-bottom:16px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.section-count{
+  font-family:'Raleway',sans-serif;font-size:11px;letter-spacing:2px;
+  text-transform:uppercase;color:var(--muted);font-weight:300;
+}
+
+/* ── EMPTY STATE ── */
+.empty-state{
+  background:var(--white);border-radius:var(--radius-lg);border:1px solid var(--border);
+  padding:60px 24px;text-align:center;
+}
+.empty-icon{font-size:40px;margin-bottom:16px;opacity:.3}
+.empty-title{font-family:'Playfair Display',serif;font-size:22px;color:var(--dark);margin-bottom:8px}
+.empty-sub{font-size:13px;color:var(--muted);font-weight:300;line-height:1.6;max-width:320px;margin:0 auto}
+
+/* ── COUPLE CARD ── */
+.couples-grid{
+  display:grid;gap:14px;
+}
+.couple-card{
+  background:var(--white);border-radius:var(--radius-lg);
+  border:1px solid var(--border);
+  box-shadow:var(--shadow);
+  overflow:hidden;transition:box-shadow .25s,transform .2s;
+  cursor:pointer;
+}
+.couple-card:hover{box-shadow:0 4px 24px rgba(0,0,0,.1);transform:translateY(-2px)}
+.couple-card-head{
+  padding:20px 22px 16px;
+  display:flex;align-items:flex-start;justify-content:space-between;gap:12px;
+  border-bottom:1px solid var(--border);
+}
+.couple-avatar{
+  width:44px;height:44px;border-radius:50%;
+  background:linear-gradient(135deg,var(--gold),#8a6f42);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Playfair Display',serif;font-size:18px;color:#f0ebe3;
+  flex-shrink:0;
+}
+.couple-info{flex:1;min-width:0}
+.couple-name{
+  font-family:'Playfair Display',serif;font-size:17px;font-weight:400;
+  color:var(--dark);margin-bottom:3px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.couple-date{font-size:12px;color:var(--muted);font-weight:300;letter-spacing:.3px}
+.couple-badge{
+  font-size:9px;letter-spacing:2px;text-transform:uppercase;font-weight:400;
+  padding:4px 10px;border-radius:20px;flex-shrink:0;
+}
+.badge-done{background:rgba(39,116,90,.1);color:var(--success)}
+.badge-pend{background:rgba(200,169,110,.12);color:var(--gold-b)}
+
+.couple-card-body{
+  padding:14px 22px 18px;
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;
+}
+.info-chip{
+  background:var(--surface);border-radius:6px;padding:9px 12px;
+}
+.info-chip-label{
+  font-size:9px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--muted);font-weight:400;margin-bottom:3px;
+}
+.info-chip-val{
+  font-size:13px;font-weight:300;color:var(--dark);
+  line-height:1.35;
+}
+
+/* ── DRAWER / DETAIL ── */
+.drawer-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.35);
+  z-index:500;opacity:0;pointer-events:none;transition:opacity .3s;
+}
+.drawer-overlay.open{opacity:1;pointer-events:all}
+.drawer{
+  position:fixed;top:0;right:0;bottom:0;width:min(540px,100vw);
+  background:var(--white);z-index:501;
+  transform:translateX(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);
+  overflow-y:auto;display:flex;flex-direction:column;
+}
+.drawer.open{transform:translateX(0)}
+.drawer-head{
+  padding:24px 24px 20px;border-bottom:1px solid var(--border);
+  display:flex;align-items:flex-start;justify-content:space-between;
+  position:sticky;top:0;background:var(--white);z-index:2;
+}
+.drawer-title{
+  font-family:'Playfair Display',serif;font-size:22px;color:var(--dark);
+}
+.drawer-close{
+  width:36px;height:36px;border-radius:50%;background:var(--surface);
+  color:var(--mid);font-size:18px;display:flex;align-items:center;justify-content:center;
+  transition:background .2s;flex-shrink:0;
+}
+.drawer-close:hover{background:var(--border)}
+.drawer-body{padding:20px 24px 32px;flex:1}
+
+/* ── SECTION GROUP ── */
+.q-section{margin-bottom:28px}
+.q-section-title{
+  font-size:9px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--gold);font-weight:400;margin-bottom:14px;
+  display:flex;align-items:center;gap:8px;
+}
+.q-section-title::after{content:'';flex:1;height:1px;background:linear-gradient(to right,rgba(200,169,110,.3),transparent)}
+.q-row{
+  margin-bottom:14px;background:var(--surface);
+  border-radius:var(--radius);padding:13px 14px;
+}
+.q-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);font-weight:400;margin-bottom:5px}
+.q-val{font-size:14px;font-weight:300;color:var(--dark);line-height:1.6}
+.q-val.empty{color:var(--muted);font-style:italic;opacity:.6}
+.q-val.multi{display:flex;flex-wrap:wrap;gap:6px}
+.q-tag{
+  font-size:11px;font-weight:300;padding:3px 10px;
+  background:rgba(200,169,110,.12);border-radius:20px;color:var(--gold-b);
+}
+
+/* ── DELETE ── */
+.delete-btn{
+  width:100%;margin-top:24px;padding:14px;border-radius:var(--radius);
+  background:transparent;border:1px solid rgba(192,57,43,.3);color:var(--danger);
+  font-size:11px;letter-spacing:2px;text-transform:uppercase;font-weight:400;
+  transition:all .25s;
+}
+.delete-btn:hover{background:rgba(192,57,43,.07)}
+
+/* ── TOAST ── */
+.toast{
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);
+  background:var(--dark);color:#f0ebe3;
+  padding:12px 22px;border-radius:30px;font-size:12px;letter-spacing:1px;
+  z-index:999;transition:transform .35s cubic-bezier(.4,0,.2,1);white-space:nowrap;
+}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:560px){
+  .login-card{padding:36px 24px}
+  .main{padding:20px 14px}
+  .topbar{padding:0 14px}
+  .couple-card-body{grid-template-columns:1fr 1fr}
+  .drawer{width:100vw}
+}
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div id="app-loading">
+  <div style="font-family:'Playfair Display',serif;font-size:clamp(28px,6vw,48px);color:var(--gold);letter-spacing:2px;margin-bottom:4px">Magari</div>
+  <div style="font-size:12px;color:var(--muted);letter-spacing:2px">Design · Storymaker</div>
+  <div style="display:flex;gap:5px;justify-content:center;margin-top:10px">
+    <span class="load-dot"></span><span class="load-dot"></span><span class="load-dot"></span>
+  </div>
+</div>
+
+<!-- LOGIN -->
+<div id="login-view">
+  <div class="login-card">
+    <div class="login-mono">LC</div>
+    <div class="login-sub">Painel · @lcunhar</div>
+    <div class="login-divider"></div>
+    <label class="login-label">Usuário</label>
+    <input class="login-input" type="text" id="l-user" placeholder="lcunhar" autocomplete="username" autocapitalize="none">
+    <label class="login-label">Senha</label>
+    <input class="login-input" type="password" id="l-pass" placeholder="••••••••" autocomplete="current-password" id="l-pass">
+    <div class="login-err" id="l-err">Usuário ou senha incorretos.</div>
+    <button class="login-btn" onclick="doLogin()">Entrar no painel</button>
+    <p style="font-size:11px;color:var(--muted);margin-top:20px;font-weight:200">Acesso exclusivo · Lívia Cunha</p>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div id="admin-view">
+  <div class="topbar">
+    <div class="topbar-brand">
+      <span class="topbar-mono">LC</span>
+      <div>
+        <div style="font-size:13px;font-weight:400;color:#f0ebe3">Painel de Briefings</div>
+        <div class="topbar-label">@lcunhar · Storymaker</div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <button class="logout-btn" onclick="doLogout()">Sair</button>
+    </div>
+  </div>
+
+  <div class="main">
+    <!-- STATS -->
+    <div class="stats-row" id="stats-row">
+      <div class="stat-card">
+        <div class="stat-num" id="stat-total">0</div>
+        <div class="stat-label">Casais</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="stat-month">0</div>
+        <div class="stat-label">Este mês</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="stat-week">0</div>
+        <div class="stat-label">Esta semana</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="stat-next">—</div>
+        <div class="stat-label">Próximo evento</div>
+      </div>
+    </div>
+
+    <!-- CONTROLS -->
+    <div class="controls">
+      <div class="search-wrap">
+        <svg class="search-icon" style="width:15px;height:15px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input class="search-input" type="text" id="search-input" placeholder="Buscar casal…" oninput="renderCouples()">
+      </div>
+      <button class="filter-btn active" id="filter-all" onclick="setFilter('all')">Todos</button>
+      <button class="filter-btn" id="filter-month" onclick="setFilter('month')">Mês</button>
+      <button class="refresh-btn" onclick="loadCouples()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+        Atualizar
+      </button>
+    </div>
+
+    <!-- LIST -->
+    <div class="section-title">
+      <span id="list-title">Briefings recebidos</span>
+      <span class="section-count" id="list-count"></span>
+    </div>
+    <div id="couples-container"></div>
+  </div>
+</div>
+
+<!-- DRAWER -->
+<div class="drawer-overlay" id="overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-head">
+    <div>
+      <div class="drawer-title" id="drawer-title">Casal</div>
+      <div style="font-size:11px;color:var(--muted);font-weight:200;margin-top:2px" id="drawer-date"></div>
+    </div>
+    <button class="drawer-close" onclick="closeDrawer()">×</button>
+  </div>
+  <div class="drawer-body" id="drawer-body"></div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+/* ── CONFIG ── */
+const PASS_HASH='lcunhar2025';
+const SESSION_KEY='lcunhar_admin_session';
+
+/* ── STATE ── */
+let allCouples=[];
+let activeFilter='all';
+let selectedId=null;
+
+/* ── INIT ── */
+window.addEventListener('load',async()=>{
+  await new Promise(r=>setTimeout(r,800));
+  document.getElementById('app-loading').classList.add('hide');
+  if(sessionStorage.getItem(SESSION_KEY)==='ok'){
+    showAdmin();
+  }else{
+    document.getElementById('login-view').style.display='flex';
+  }
+  document.getElementById('l-pass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
+  document.getElementById('l-user').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('l-pass').focus()});
+});
+
+/* ── LOGIN ── */
+function doLogin(){
+  const u=document.getElementById('l-user').value.trim().toLowerCase();
+  const p=document.getElementById('l-pass').value.trim();
+  const err=document.getElementById('l-err');
+  if((u==='lcunhar'||u==='livia')&&p===PASS_HASH){
+    sessionStorage.setItem(SESSION_KEY,'ok');
+    err.classList.remove('show');
+    showAdmin();
+  }else{
+    err.classList.add('show');
+    document.getElementById('l-pass').value='';
+    document.getElementById('l-pass').focus();
+  }
+}
+function doLogout(){
+  sessionStorage.removeItem(SESSION_KEY);
+  location.reload();
+}
+
+/* ── SHOW ADMIN ── */
+function showAdmin(){
+  document.getElementById('login-view').style.display='none';
+  const av=document.getElementById('admin-view');
+  av.classList.add('show');
+  loadCouples();
+}
+
+/* ── LOAD DATA ── */
+async function loadCouples(){
+  try{
+    const res=await window.storage.list('couple_',true);
+    const keys=res?.keys||[];
+    const records=[];
+    for(const k of keys){
+      try{
+        const r=await window.storage.get(k,true);
+        if(r?.value){
+          const data=JSON.parse(r.value);
+          records.push(data);
+        }
+      }catch(e){}
+    }
+    allCouples=records.sort((a,b)=>b.ts-a.ts);
+    updateStats();
+    renderCouples();
+  }catch(e){
+    // No storage / no entries yet — show empty
+    allCouples=[];
+    updateStats();
+    renderCouples();
+  }
+}
+
+/* ── STATS ── */
+function updateStats(){
+  const now=new Date();
+  const startOfMonth=new Date(now.getFullYear(),now.getMonth(),1);
+  const startOfWeek=new Date(now); startOfWeek.setDate(now.getDate()-now.getDay());
+  const month=allCouples.filter(c=>new Date(c.timestamp)>=startOfMonth).length;
+  const week=allCouples.filter(c=>new Date(c.timestamp)>=startOfWeek).length;
+  setEl('stat-total',allCouples.length);
+  setEl('stat-month',month);
+  setEl('stat-week',week);
+
+  const upcoming=allCouples
+    .map(c=>c.answers?.wedding_date)
+    .filter(d=>d&&new Date(d+'T00:00:00')>now)
+    .map(d=>new Date(d+'T00:00:00'))
+    .sort((a,b)=>a-b)[0];
+  setEl('stat-next', upcoming ? daysUntil(upcoming)+'d' : '—');
+}
+
+function daysUntil(d){return Math.ceil((d-new Date())/86400000)}
+
+/* ── FILTER ── */
+function setFilter(f){
+  activeFilter=f;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('filter-'+f).classList.add('active');
+  renderCouples();
+}
+
+/* ── RENDER LIST ── */
+function renderCouples(){
+  const query=(document.getElementById('search-input').value||'').toLowerCase();
+  const now=new Date();
+  const startOfMonth=new Date(now.getFullYear(),now.getMonth(),1);
+
+  let list=allCouples;
+  if(activeFilter==='month') list=list.filter(c=>new Date(c.timestamp)>=startOfMonth);
+  if(query){
+    list=list.filter(c=>{
+      const a=c.answers||{};
+      const txt=[a['q-conheceram'],a['q-destaque'],a['q-personalidade'],a.wedding_date,''].join(' ').toLowerCase();
+      return txt.includes(query);
+    });
+  }
+
+  setEl('list-count', list.length + (list.length===1?' briefing':' briefings'));
+  const container=document.getElementById('couples-container');
+
+  if(list.length===0){
+    container.innerHTML=`
+      <div class="empty-state">
+        <div class="empty-icon">💍</div>
+        <div class="empty-title">${query?'Nenhum resultado':'Nenhum briefing ainda'}</div>
+        <div class="empty-sub">${query?'Tente outro termo de busca.':'Quando os noivos preencherem o briefing, os dados aparecerão aqui.'}</div>
+      </div>`;
+    return;
+  }
+
+  container.innerHTML=list.map((c,i)=>coupleCardHTML(c,i)).join('');
+}
+
+/* ── CARD HTML ── */
+function coupleCardHTML(c,i){
+  const a=c.answers||{};
+  const story=a['q-conheceram']||'';
+  const personalidade=a['q-personalidade']||'';
+  const wdate=a.wedding_date?formatDate(a.wedding_date):'—';
+  const estilo=a['q-estilo-cob']||a['q-reels-tom']||'—';
+  const tons=a['q-tons']||'—';
+  const initials=getInitials(story,i);
+  const ago=timeAgo(new Date(c.timestamp));
+  const isRecent=(new Date()-new Date(c.timestamp))<86400000*3;
+
+  return `
+  <div class="couple-card" onclick="openDrawer('${c.id}')">
+    <div class="couple-card-head">
+      <div style="display:flex;align-items:center;gap:12px;flex:1;min-width:0">
+        <div class="couple-avatar">${initials}</div>
+        <div class="couple-info">
+          <div class="couple-name">${personalidade||'Casal #'+(i+1)}</div>
+          <div class="couple-date">Preenchido ${ago}</div>
+        </div>
+      </div>
+      <span class="couple-badge ${isRecent?'badge-done':'badge-pend'}">${isRecent?'Novo':'Recebido'}</span>
+    </div>
+    <div class="couple-card-body">
+      ${wdate!=='—'?`<div class="info-chip"><div class="info-chip-label">Casamento</div><div class="info-chip-val">${wdate}</div></div>`:''}
+      ${estilo!=='—'?`<div class="info-chip"><div class="info-chip-label">Estilo</div><div class="info-chip-val">${estilo}</div></div>`:''}
+      ${tons!=='—'?`<div class="info-chip"><div class="info-chip-label">Paleta</div><div class="info-chip-val">${tons}</div></div>`:''}
+      ${story?`<div class="info-chip" style="grid-column:1/-1"><div class="info-chip-label">Como se conheceram</div><div class="info-chip-val" style="overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical">${esc(story)}</div></div>`:''}
+    </div>
+  </div>`;
+}
+
+/* ── DRAWER ── */
+function openDrawer(id){
+  selectedId=id;
+  const c=allCouples.find(x=>x.id===id);
+  if(!c)return;
+  const a=c.answers||{};
+
+  setEl('drawer-title', a['q-personalidade']||'Briefing do Casal');
+  setEl('drawer-date', 'Recebido em '+formatDateFull(c.timestamp));
+
+  const sections=[
+    {
+      title:'Casal — Pessoal',
+      rows:[
+        {label:'Como se conheceram',key:'q-conheceram'},
+        {label:'Personalidade do casal',key:'q-personalidade'},
+      ]
+    },
+    {
+      title:'Expectativas',
+      rows:[
+        {label:'Prioridades da cobertura',key:'q-prioridades',multi:true},
+        {label:'Momento especial',key:'q-momento-esp'},
+      ]
+    },
+    {
+      title:'Stories',
+      rows:[
+        {label:'Depoimento / recado',key:'q-depoimento'},
+        {label:'Estilo da cobertura',key:'q-estilo-cob'},
+        {label:'Pessoas em destaque',key:'q-destaque'},
+      ]
+    },
+    {
+      title:'Reels',
+      rows:[
+        {label:'Tom do reels',key:'q-reels-tom'},
+        {label:'Duração',key:'q-reels-dur'},
+        {label:'Legenda',key:'q-legenda'},
+        {label:'Publicação',key:'q-pub'},
+        {label:'@ colaborações',key:'q-mentions'},
+      ]
+    },
+    {
+      title:'Identidade Visual',
+      rows:[
+        {label:'Paleta de tons',key:'q-tons'},
+        {label:'Foto vs. Vídeo',key:'q-foto-video'},
+        {label:'Áudio natural',key:'q-audio'},
+        {label:'Parceiros / destaques',key:'q-parceiros'},
+      ]
+    },
+    {
+      title:'Referências',
+      rows:[
+        {label:'Pinterest',key:'q-pinterest',link:true},
+        {label:'Reels / stories referência',key:'q-reels-ref',link:true},
+        {label:'Playlist do casal',key:'q-playlist-link',link:true},
+      ]
+    },
+    {
+      title:'Logística',
+      rows:[
+        {label:'Data do casamento',key:'wedding_date'},
+        {label:'Endereço',key:'q-endereco'},
+        {label:'Chegada',key:'q-chegada'},
+        {label:'Saída',key:'q-saida'},
+        {label:'Momento principal',key:'q-hora-principal'},
+        {label:'Cronograma',key:'q-cronograma'},
+      ]
+    },
+    {
+      title:'Acesso & Extras',
+      rows:[
+        {label:'Instagram — login',key:'q-ig-login'},
+        {label:'Extras / observações',key:'q-extras'},
+      ]
+    },
+  ];
+
+  let html=sections.map(sec=>{
+    const rowsHtml=sec.rows.map(r=>{
+      const raw=a[r.key];
+      let valHtml='';
+      if(r.multi&&Array.isArray(raw)){
+        if(raw.length===0) valHtml=`<div class="q-val empty">Não preenchido</div>`;
+        else valHtml=`<div class="q-val multi">${raw.map(v=>`<span class="q-tag">${esc(v)}</span>`).join('')}</div>`;
+      }else if(r.link&&raw){
+        valHtml=`<div class="q-val"><a href="${esc(raw)}" target="_blank" style="color:var(--gold);text-decoration:none;word-break:break-all">${esc(raw)}</a></div>`;
+      }else if(raw){
+        valHtml=`<div class="q-val" style="white-space:pre-wrap">${esc(raw)}</div>`;
+      }else{
+        valHtml=`<div class="q-val empty">Não preenchido</div>`;
+      }
+      return `<div class="q-row"><div class="q-label">${r.label}</div>${valHtml}</div>`;
+    }).join('');
+    return `<div class="q-section"><div class="q-section-title">${sec.title}</div>${rowsHtml}</div>`;
+  }).join('');
+
+  html+=`<button class="delete-btn" onclick="deleteCouple('${id}')">Excluir este briefing</button>`;
+
+  document.getElementById('drawer-body').innerHTML=html;
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function closeDrawer(){
+  document.getElementById('drawer').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow='';
+  selectedId=null;
+}
+
+/* ── DELETE ── */
+async function deleteCouple(id){
+  if(!confirm('Excluir este briefing? Essa ação não pode ser desfeita.'))return;
+  try{
+    await window.storage.delete(id,true);
+    allCouples=allCouples.filter(c=>c.id!==id);
+    closeDrawer();
+    updateStats();
+    renderCouples();
+    showToast('Briefing excluído');
+  }catch(e){showToast('Erro ao excluir')}
+}
+
+/* ── HELPERS ── */
+function setEl(id,v){const e=document.getElementById(id);if(e)e.textContent=v}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function formatDate(d){
+  const dt=new Date(d+'T12:00:00');
+  return dt.toLocaleDateString('pt-BR',{day:'2-digit',month:'short',year:'numeric'});
+}
+function formatDateFull(iso){
+  return new Date(iso).toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'});
+}
+function timeAgo(d){
+  const diff=(Date.now()-d)/1000;
+  if(diff<60)return 'agora';
+  if(diff<3600)return Math.floor(diff/60)+'min atrás';
+  if(diff<86400)return Math.floor(diff/3600)+'h atrás';
+  if(diff<604800)return Math.floor(diff/86400)+'d atrás';
+  return formatDate(d.toISOString().slice(0,10));
+}
+function getInitials(story,i){
+  const letters='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  return letters[i%26];
+}
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+</script>
+</body>
+</html>
