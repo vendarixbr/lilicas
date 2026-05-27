@@ -19,7 +19,7 @@ textarea{resize:none}button{cursor:pointer}
 :root{
   --gold:#cc0808;--gold-bright:#910000;--gold-dim:#3D4F3C;
   --gold-glow:rgba(107,39,55,0.08);--gold-border:#D4C9BB;
-  --cream:#1A1A1A;--cream-dim:#7A7060;
+  --cream:#1A1A1A;--cream-dim:#4A3C2C;
   --dark:#F5F0EB;--dark-mid:#EDE6DC;
   --dark-card:#EDE6DC;
   --radius:3px;
@@ -67,8 +67,8 @@ textarea{resize:none}button{cursor:pointer}
   transition:opacity .6s ease;background-size:cover;background-position:center;text-align:center;
 }
 .loading-inner{max-width:680px;width:100%;display:flex;flex-direction:column;align-items:center;gap:18px;padding:12px}
-.brand-logo{width:clamp(190px,42vw,440px);height:auto;display:block;margin:0 auto;object-fit:contain;max-height:34vh}
-@media(max-width:420px){.brand-logo{width:clamp(150px,58vw,260px);max-height:28vh}}
+.brand-logo{width:clamp(160px,38vw,380px);height:auto;display:block;margin:0 auto;object-fit:contain;max-height:22vh}
+@media(max-width:420px){.brand-logo{width:clamp(120px,50vw,220px);max-height:18vh}}
 
 .load-name{font-family:'Raleway',sans-serif;font-weight:300;font-size:13px;letter-spacing:4px;text-transform:uppercase;color:var(--cream-dim);margin-top:6px}
 .load-sub{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:20px;color:var(--gold);letter-spacing:1px}
@@ -170,11 +170,11 @@ textarea{resize:none}button{cursor:pointer}
 .t-display{font-family:'Cormorant Garamond',serif;font-weight:600;line-height:1.05;color:var(--cream)}
 .t-display-italic{font-family:'Cormorant Garamond',serif;font-weight:400;font-style:italic;line-height:1.1;color:var(--cream)}
 .t-question{font-family:'Cormorant Garamond',serif;font-weight:400;font-style:italic;font-size:clamp(20px,5vw,28px);color:var(--cream);line-height:1.35;text-align:center;max-width:520px}
-.t-body{font-family:'Raleway',sans-serif;font-weight:300;font-size:14px;line-height:1.75;color:var(--cream-dim);letter-spacing:.2px}
-.t-hint{font-family:'Raleway',sans-serif;font-weight:300;font-size:12px;color:var(--cream-dim);opacity:.8;text-align:center;letter-spacing:.3px}
+.t-body{font-family:'Raleway',sans-serif;font-weight:400;font-size:14px;line-height:1.75;color:var(--cream-dim);letter-spacing:.2px}
+.t-hint{font-family:'Raleway',sans-serif;font-weight:300;font-size:12px;color:var(--cream-dim);text-align:center;letter-spacing:.3px}
 .t-label{font-family:'Raleway',sans-serif;font-weight:400;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold)}
 .divider-h{height:1px;background:linear-gradient(to right,transparent,var(--gold-border),transparent);width:100%;max-width:280px;margin:0 auto}
-.divider-v{width:1px;height:40px;background:linear-gradient(to bottom,transparent,var(--gold-border),transparent);margin:0 auto}
+.divider-v{width:1px;height:20px;background:linear-gradient(to bottom,transparent,var(--gold-border),transparent);margin:0 auto}
 
 /* ─── SCROLL ─── */
 .scroll-inner{
@@ -318,7 +318,7 @@ textarea{resize:none}button{cursor:pointer}
 
 /* ─── BADGES ─── */
 .section-badge{font-family:'Raleway',sans-serif;font-weight:300;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);display:block;text-align:center;margin-bottom:4px}
-.q-number{font-family:'Raleway',sans-serif;font-weight:200;font-size:11px;letter-spacing:2px;color:var(--cream-dim);opacity:.6;display:block;text-align:center;margin-bottom:20px}
+.q-number{font-family:'Raleway',sans-serif;font-weight:200;font-size:11px;letter-spacing:2px;color:var(--cream-dim);opacity:.75;display:block;text-align:center;margin-bottom:20px}
 
 /* ─── SECTION SCREENS ─── */
 .section-screen{text-align:center;gap:12px}
@@ -329,7 +329,7 @@ textarea{resize:none}button{cursor:pointer}
 .cd-unit{display:flex;flex-direction:column;align-items:center;padding:0 clamp(10px,3vw,24px);position:relative}
 .cd-unit:not(:last-child)::after{content:':';position:absolute;right:clamp(-8px,-1.5vw,-4px);top:4px;font-family:'Cormorant Garamond',serif;font-size:clamp(36px,9vw,72px);font-weight:400;color:var(--gold);opacity:.35;line-height:1}
 .cd-num{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(40px,10vw,80px);color:var(--cream);line-height:1;min-width:clamp(50px,12vw,90px);text-align:center;transition:all .3s}
-.cd-label{font-family:'Raleway',sans-serif;font-weight:200;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--cream-dim);opacity:.6;margin-top:8px}
+.cd-label{font-family:'Raleway',sans-serif;font-weight:300;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--cream-dim);opacity:.8;margin-top:8px}
 
 /* ─── SWATCH ─── */
 .swatch{display:block;width:32px;height:12px;border-radius:6px;margin:0 auto 8px}
@@ -531,13 +531,13 @@ textarea{resize:none}button{cursor:pointer}
   <div class="orn bl"></div><div class="orn br"></div>
   <div class="scroll-inner" style="align-items:center;text-align:center;gap:0">
     <img src="images/logo.png" alt="Logotipo" class="brand-logo au" style="margin-bottom:8px">
-    <p class="au" style="margin-bottom:14px;font-family:'Raleway',sans-serif;font-weight:300;font-size:13px;letter-spacing:5px;text-transform:uppercase;color:#d4b882">@lcunhar</p>
+    <p class="au" style="margin-bottom:8px;font-family:'Raleway',sans-serif;font-weight:300;font-size:13px;letter-spacing:5px;text-transform:uppercase;color:#d4b882">@lcunhar</p>
     <div class="divider-v au1"></div>
-    <h1 class="t-display au2" style="font-size:clamp(44px,11vw,88px);margin:18px 0 10px;letter-spacing:-.5px">
+    <h1 class="t-display au2" style="font-size:clamp(44px,11vw,88px);margin:10px 0 6px;letter-spacing:-.5px">
       Briefing de<br><em class="gold-shimmer" style="font-style:italic">Casamento</em>
     </h1>
-    <div class="divider-h au3" style="margin:16px auto 20px"></div>
-    <p class="t-body au3" style="text-align:center;max-width:380px;margin-bottom:28px">
+    <div class="divider-h au3" style="margin:8px auto 12px"></div>
+    <p class="t-body au3" style="text-align:center;max-width:380px;margin-bottom:16px">
       Hoje, vamos definir tudo para que a cobertura registre esse dia inesquecível da forma que vocês sempre sonharam.
     </p>
     <div class="glass-card au4" style="text-align:left;padding:20px 20px 22px">
@@ -570,7 +570,7 @@ textarea{resize:none}button{cursor:pointer}
   <div class="orn tl"></div><div class="orn br"></div>
   <div class="scroll-inner" style="text-align:center;gap:0">
     <p class="t-eyebrow au" style="margin-bottom:20px">O grande dia se aproxima</p>
-    <p class="t-display-italic au1" style="font-size:clamp(16px,4vw,22px);color:var(--gold-bright);max-width:340px;margin:0 auto 28px;line-height:1.5">"A jornada de mil milhas começa com um único passo — e vocês já deram o mais importante."</p>
+    <p class="t-display-italic au1" style="font-size:clamp(16px,4vw,22px);color:var(--gold-bright);max-width:340px;margin:0 auto 28px;line-height:1.5">"To love and be loved is to feel the sun from both sides."<br><span style="font-size:clamp(12px,3vw,15px);font-style:normal;font-family:'Raleway',sans-serif;font-weight:300;letter-spacing:2px;opacity:.7">David Viscott</span></p>
     <div class="field-wrap au2" style="margin-bottom:28px;text-align:left">
       <label class="field-label">Data do casamento</label>
       <input type="date" class="field-input" id="wedding-date" onchange="calcCountdown()">
@@ -727,7 +727,7 @@ textarea{resize:none}button{cursor:pointer}
 <div class="screen" id="s9" style="background:radial-gradient(ellipse at 30% 50%,rgba(200,169,110,.09) 0%,transparent 60%)">
   <div class="scroll-inner">
     <span class="section-badge au">Stories</span><span class="q-number au">05</span>
-    <p class="t-question au1" style="margin-bottom:22px">Gostariam de aparecer falando — um depoimento ou recado um para o outro?</p>
+    <p class="t-question au1" style="margin-bottom:22px">Gostariam de aparecer falando, um depoimento ou recado um para o outro?</p>
     <div class="opts-wrap au2">
       <button class="opt" onclick="sel(this,'q-depoimento','Sim')">
         <svg class="opt-icon-svg"><use href="#ic-mic"/></svg>
@@ -740,7 +740,7 @@ textarea{resize:none}button{cursor:pointer}
       </button>
       <button class="opt" onclick="sel(this,'q-depoimento','Talvez')">
         <svg class="opt-icon-svg"><use href="#ic-chat"/></svg>
-        <span class="opt-title">Talvez — pode sugerir no dia</span>
+        <span class="opt-title">Talvez, pode sugerir no dia</span>
       </button>
     </div>
     <div class="nav-row au3"><button class="btn-ghost" onclick="go(10)">Pular</button><button class="btn-primary" onclick="go(10)">Próxima <svg width="14" height="8"><use href="#ic-arrow"/></svg></button></div>
@@ -920,14 +920,14 @@ textarea{resize:none}button{cursor:pointer}
     <p class="t-question au1" style="margin-bottom:10px">Gostariam de capturar o áudio natural da cerimônia?</p>
     <p class="t-hint au2" style="margin-bottom:22px">Votos, fala do celebrante, músicas ao vivo…</p>
     <div class="opts-wrap au3">
-      <button class="opt" onclick="sel(this,'q-audio','Sim — áudio original')">
+      <button class="opt" onclick="sel(this,'q-audio','Sim, áudio original')">
         <svg class="opt-icon-svg"><use href="#ic-mic"/></svg>
         <span class="opt-title">Sim, queremos o áudio original</span>
         <span class="opt-sub">manter os sons reais da cerimônia</span>
       </button>
-      <button class="opt" onclick="sel(this,'q-audio','Não — só trilha')">
+      <button class="opt" onclick="sel(this,'q-audio','Não, só trilha')">
         <svg class="opt-icon-svg"><use href="#ic-music"/></svg>
-        <span class="opt-title">Não — apenas trilha sonora</span>
+        <span class="opt-title">Não, apenas trilha sonora</span>
         <span class="opt-sub">música de fundo em cima das imagens</span>
       </button>
     </div>
@@ -1008,7 +1008,7 @@ textarea{resize:none}button{cursor:pointer}
     <div class="fields-stack au2">
       <div>
         <label class="field-label" style="display:flex;align-items:center;gap:6px"><svg style="width:12px;height:12px;color:var(--gold)"><use href="#ic-map"/></svg> Endereço com ponto de referência</label>
-        <input class="field-input" id="q-endereco" placeholder="Rua das Flores, 100 — próximo ao parque…">
+        <input class="field-input" id="q-endereco" placeholder="Rua das Flores, 100, próximo ao parque…">
       </div>
       <div>
         <label class="field-label" style="display:flex;align-items:center;gap:6px"><svg style="width:12px;height:12px;color:var(--gold)"><use href="#ic-clock"/></svg> Horário de chegada desejado</label>
@@ -1034,7 +1034,7 @@ textarea{resize:none}button{cursor:pointer}
     <p class="t-question au1" style="margin-bottom:10px">Cronograma do evento</p>
     <p class="t-hint au2" style="margin-bottom:20px">Quanto mais detalhado, melhor a cobertura</p>
     <div class="field-wrap au3" style="margin-bottom:24px">
-      <textarea class="field-textarea" id="q-cronograma" placeholder="Ex:&#10;14h — Chegada dos convidados&#10;17h — Cerimônia&#10;18h — Coquetel&#10;19h30 — Jantar&#10;21h — Festa" style="min-height:160px"></textarea>
+      <textarea class="field-textarea" id="q-cronograma" placeholder="Ex:&#10;14h: Chegada dos convidados&#10;17h: Cerimônia&#10;18h: Coquetel&#10;19h30: Jantar&#10;21h: Festa" style="min-height:160px"></textarea>
     </div>
     <div class="nav-row au4"><button class="btn-ghost" onclick="go(26)">Pular</button><button class="btn-primary" onclick="save('q-cronograma');go(26)">Próxima <svg width="14" height="8"><use href="#ic-arrow"/></svg></button></div>
   </div>
