@@ -728,25 +728,6 @@ textarea{resize:none}button{cursor:pointer}
         <span class="opt-sub">cortes rápidos no beat, energia alta</span>
       </button>
     </div>
-    <div class="nav-row au3"><button class="btn-primary" onclick="go(14)">Próxima <svg width="14" height="8"><use href="#ic-arrow"/></svg></button></div>
-  </div>
-</div>
-
-<!-- ══ S14 · Duração ══ -->
-<div class="screen" id="s14" style="background:radial-gradient(ellipse at 70% 70%,rgba(180,150,90,.08) 0%,transparent 60%)">
-  <div class="scroll-inner">
-    <span class="section-badge au">Reels</span><span class="q-number au">09</span>
-    <p class="t-question au1" style="margin-bottom:22px">Prefere um Reels mais curto ou mais completo?</p>
-    <div class="opts-wrap grid-2 au2">
-      <button class="opt compact" onclick="sel(this,'q-reels-dur','Curto — até 1 min')">
-        <svg class="opt-icon-svg"><use href="#ic-scissors"/></svg>
-        <span class="opt-title">Curto</span><span class="opt-sub">até 1 minuto impactante</span>
-      </button>
-      <button class="opt compact" onclick="sel(this,'q-reels-dur','Completo — até 3 min')">
-        <svg class="opt-icon-svg"><use href="#ic-film"/></svg>
-        <span class="opt-title">Completo</span><span class="opt-sub">até 3 min, abrangente</span>
-      </button>
-    </div>
     <div class="nav-row au3"><button class="btn-primary" onclick="go(15)">Próxima <svg width="14" height="8"><use href="#ic-arrow"/></svg></button></div>
   </div>
 </div>
@@ -818,6 +799,10 @@ textarea{resize:none}button{cursor:pointer}
         <span class="swatch" style="background:linear-gradient(to right,#7a9ab8,#c4d8e8)"></span>
         <span class="opt-title">Frios</span><span class="opt-sub">azul, prata</span>
       </button>
+    </div>
+    <div class="field-wrap au3" style="margin-bottom:24px">
+      <label class="field-label">Outro:</label>
+      <input class="field-input" id="q-tons-outro" placeholder="Descreva outra paleta de tons…" oninput="answers['q-tons-outro']=this.value">
     </div>
     <div class="nav-row au3"><button class="btn-primary" onclick="go(18)">Próxima <svg width="14" height="8"><use href="#ic-arrow"/></svg></button></div>
   </div>
@@ -1114,7 +1099,7 @@ window.addEventListener('load',()=>{
 /* DOTS */
 function buildDots(){
   const w=document.getElementById('dots');
-  for(let i=0;i<21;i++){const d=document.createElement('div');d.className='dot';d.id='dot'+i;w.appendChild(d)}
+  for(let i=0;i<20;i++){const d=document.createElement('div');d.className='dot';d.id='dot'+i;w.appendChild(d)}
 }
 function updateDots(){
   const w=document.getElementById('dots');
@@ -1217,9 +1202,14 @@ function setEl(id,v){const e=document.getElementById(id);if(e)e.textContent=v}
 function pad(n){return n<10?'0'+n:String(n)}
 
 window.addEventListener('load',()=>{
-  const d=new Date();d.setMonth(d.getMonth()+6);
   const el=document.getElementById('wedding-date');
-  if(el){el.value=d.toISOString().slice(0,10);calcCountdown()}
+  if(el){
+    el.value='2026-06-27';
+    wDate=new Date('2026-06-27T16:00:00');
+    answers['wedding_date']='2026-06-27';
+    if(cdTimer)clearInterval(cdTimer);
+    tick();cdTimer=setInterval(tick,1000);
+  }
 });
 </script>
 </body>
