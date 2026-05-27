@@ -11,7 +11,7 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html{font-size:16px;-webkit-text-size-adjust:100%}
-body{font-family:'Raleway',sans-serif;background-color:#8B1A24;background-image:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(255,255,255,0.028) 3px,rgba(255,255,255,0.028) 4px),repeating-linear-gradient(90deg,transparent,transparent 3px,rgba(255,255,255,0.018) 3px,rgba(255,255,255,0.018) 4px),repeating-linear-gradient(0deg,transparent,transparent 7px,rgba(212,175,112,0.025) 7px,rgba(212,175,112,0.025) 8px),repeating-linear-gradient(90deg,transparent,transparent 7px,rgba(212,175,112,0.018) 7px,rgba(212,175,112,0.018) 8px);background-size:4px 4px,4px 4px,8px 8px,8px 8px;color:#FFFFFF;overflow:hidden;width:100vw;height:100vh;height:100dvh;position:fixed;touch-action:manipulation}
+body{font-family:'Raleway',sans-serif;background-color:#8B1A24;color:#FFFFFF;overflow:hidden;width:100vw;height:100vh;height:100dvh;position:fixed;touch-action:manipulation}
 body::before{content:'';position:fixed;left:-10%;width:120%;top:38%;height:1px;background:linear-gradient(90deg,transparent 5%,rgba(255,220,180,0.5) 35%,rgba(255,220,180,0.5) 65%,transparent 95%);filter:blur(24px);z-index:3;pointer-events:none;opacity:.6}
 input,textarea,button{font-family:inherit;-webkit-appearance:none;appearance:none}
 textarea{resize:none}button{cursor:pointer}
@@ -1136,6 +1136,22 @@ textarea{resize:none}button{cursor:pointer}
 </div>
 
 <script>
+/* ── STORAGE ── */
+window.storage={
+  _p:'lcunhar_',
+  async set(k,v){localStorage.setItem(this._p+k,v)},
+  async get(k){const v=localStorage.getItem(this._p+k);return v!==null?{value:v}:null},
+  async list(prefix){
+    const keys=[];
+    for(let i=0;i<localStorage.length;i++){
+      const k=localStorage.key(i);
+      if(k&&k.startsWith(this._p+prefix))keys.push(k.slice(this._p.length));
+    }
+    return{keys};
+  },
+  async delete(k){localStorage.removeItem(this._p+k)}
+};
+
 let cur=0,answers={},wDate=null,cdTimer=null,musicOn=false;
 const SPOTIFY='https://open.spotify.com/playlist/28RTTgdY3KGpQxU0EDFCfZ?si=DCoDbvmtTBWGapUL0aAjQw&pi=Bc7vW8KdS26DN';
 async function saveToStorage(){
